@@ -153,9 +153,9 @@ fun Map(name: String, modifier: Modifier = Modifier) {
                 ) {
 
 
-                    Column() {
+                    Column {
                         for (y in 0..(drawarray[0].size - 1)) {
-                            Row() {
+                            Row {
                                 for (x in 0..(drawarray.size - 1)) {
                                     when (drawarray[x][y]) {
                                         10 -> {

@@ -1,11 +1,11 @@
 package com.example.minesweeper
 
 
-var amountOfMines = 0;
+var amountOfMines = 0
 fun createMap(row: Int, column: Int): Array<Array<Int>> {
-    var size = row; //must be bigger than 2
-    var size1 = column; //must be bigger than 2
-    val fullMapsize: Float = size.toFloat() * size1.toFloat();
+    var size = row //must be bigger than 2
+    var size1 = column //must be bigger than 2
+    val fullMapsize: Float = size.toFloat() * size1.toFloat()
     var columns = Array(size) { Array(size1) { 0 } }
 
 
@@ -27,16 +27,16 @@ fun createMap(row: Int, column: Int): Array<Array<Int>> {
         var y = (0..(size1 - 1)).random()
         // print("X=" + x + "Y=" + y)
         if (columns[x][y] != 9) {
-            columns[x][y] = 9;
+            columns[x][y] = 9
         } else {
-            var mineDubblePlaced = true;
+            var mineDubblePlaced = true
             while (mineDubblePlaced == true) {
                 x = (0..(size - 1)).random()
                 y = (0..(size1 - 1)).random()
                 // println("dubble placed"+"X=" + x + "Y=" + y) //debug
                 if (columns[x][y] != 9) {
-                    columns[x][y] = 9;
-                    mineDubblePlaced = false;
+                    columns[x][y] = 9
+                    mineDubblePlaced = false
                 }
             }
         }
