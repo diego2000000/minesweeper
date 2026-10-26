@@ -375,7 +375,7 @@ fun Map(name: String, modifier: Modifier = Modifier) {
                             rowInput = it.filter { c -> c.isDigit() }
                             sizeError = false
                         },
-                        label = { Text("Rows (2–256)") },
+                        label = { Text("Rows (2–25)") },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number
                         ),
@@ -390,7 +390,7 @@ fun Map(name: String, modifier: Modifier = Modifier) {
                             columnInput = it.filter { c -> c.isDigit() }
                             sizeError = false
                         },
-                        label = { Text("Columns (3–256)") },
+                        label = { Text("Columns (3–25)") },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number
                         ),
@@ -399,7 +399,7 @@ fun Map(name: String, modifier: Modifier = Modifier) {
 
                     if (sizeError) {
                         Text(
-                            text = "Rows must be 2–256 and columns 3–256.",
+                            text = "Rows must be 2–25 and columns 3–25.",
                             color = MaterialTheme.colorScheme.error
                         )
                     }
@@ -414,8 +414,8 @@ fun Map(name: String, modifier: Modifier = Modifier) {
                         if (
                             newRows != null &&
                             newColumns != null &&
-                            newRows in 2..256 &&
-                            newColumns in 3..256
+                            newRows in 2..25 &&
+                            newColumns in 3..25
                         ) {
                             row = newRows
                             column = newColumns
