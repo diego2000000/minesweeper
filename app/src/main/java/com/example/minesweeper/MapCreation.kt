@@ -2,6 +2,7 @@ package com.example.minesweeper
 
 
 var amountOfMines = 0
+var minesModifier = 20
 fun createMap(row: Int, column: Int): Array<Array<Int>> {
     var size = row //must be bigger than 2
     var size1 = column //must be bigger than 2
@@ -14,9 +15,15 @@ fun createMap(row: Int, column: Int): Array<Array<Int>> {
     //println(fullMapsize) //debug
     var minesWithinLimit = false
     while (minesWithinLimit == false) {
+        if(fullMapsize<(8*8)) {
+            amountOfMines = (1..(8*8)).random()
+        } else if (fullMapsize<(16*16)){
+            amountOfMines = (10..(16*16)).random()
+        } else{
+            amountOfMines = (40..(25*25)).random()
+        }
 
-        amountOfMines = (1..99).random()
-        if (amountOfMines < (fullMapsize - ((fullMapsize / 100) * 80))) {
+        if (amountOfMines < (fullMapsize - ((fullMapsize / 100) * (100 - minesModifier)))) {
             minesWithinLimit = true
         }
         //println(amountOfMines) //debug

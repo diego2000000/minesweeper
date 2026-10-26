@@ -40,6 +40,9 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.view.Window
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -48,15 +51,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.verticalScroll
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
-class MainActivity : ComponentActivity() {
+
+class MainActivity: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             MinesweeperTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing)) { innerPadding ->
                     Map(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
@@ -69,6 +80,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Map(name: String, modifier: Modifier = Modifier) {
+
     var columns by remember { mutableStateOf(createMap(row, column)) }
     var drawarray by remember { mutableStateOf(Array(row) { Array(column) { 10 } }) }
     var refresh by remember { mutableStateOf(0) }
@@ -78,6 +90,7 @@ fun Map(name: String, modifier: Modifier = Modifier) {
 
     var rowInput by remember { mutableStateOf(row.toString()) }
     var columnInput by remember { mutableStateOf(column.toString()) }
+    var mineModifer by remember { mutableStateOf(minesModifier.toString()) }
 
     var settingsOpen by remember { mutableStateOf(false) }
     var sizeError by remember { mutableStateOf(false) }
@@ -115,7 +128,7 @@ fun Map(name: String, modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxWidth(),
+            .fillMaxHeight(),
         contentAlignment = Alignment.Center,
 
         ) {
@@ -137,7 +150,8 @@ fun Map(name: String, modifier: Modifier = Modifier) {
 
             BoxWithConstraints(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxHeight()
+                    .fillMaxWidth()
                     .padding(horizontal = 16.dp)
 
             ) {
@@ -397,9 +411,19 @@ fun Map(name: String, modifier: Modifier = Modifier) {
                         singleLine = true
                     )
 
+                    OutlinedTextField(
+                        value = mineModifer,
+                        onValueChange = {
+                            mineModifer = it.filter { c -> c.isDigit() }
+                            sizeError = false
+                        }, label = { Text("max % of Mines") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        singleLine = true
+                    )
+
                     if (sizeError) {
                         Text(
-                            text = "Rows must be 2–25 and columns 3–25.",
+                            text = "Rows must be 2–25 and columns 3–25 and max %of Mines 1-90.",
                             color = MaterialTheme.colorScheme.error
                         )
                     }
@@ -410,15 +434,19 @@ fun Map(name: String, modifier: Modifier = Modifier) {
                     onClick = {
                         val newRows = rowInput.toIntOrNull()
                         val newColumns = columnInput.toIntOrNull()
+                        val newMaxMines = mineModifer.toIntOrNull()
 
                         if (
                             newRows != null &&
                             newColumns != null &&
+                            newMaxMines != null &&
                             newRows in 2..25 &&
-                            newColumns in 3..25
+                            newColumns in 3..25 &&
+                            newMaxMines in 1..90
                         ) {
                             row = newRows
                             column = newColumns
+                            minesModifier = newMaxMines
 
                             columns = createMap(newRows, newColumns)
 
@@ -453,7 +481,6 @@ fun Map(name: String, modifier: Modifier = Modifier) {
             }
         )
     }
-
 
 }
 
@@ -511,5 +538,6 @@ fun vibrateFlag(vibrator: Vibrator?, removing: Boolean) {
         vibrator.vibrate(if (removing) 250 else 180)
     }
 }
+
 
 
